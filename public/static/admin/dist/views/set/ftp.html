@@ -1,0 +1,102 @@
+<title>FTP设置</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>FTP设置</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">FTP设置</div>
+                <div class="layui-card-body" pad15>
+                    <div class="layui-form" wid100 id="ftp_form">
+                        <script type="text/html" template id="ftp">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">FTP服务器</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="host" value="{{= d.host || '' }}" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">FTP端口号</label>
+                                <div class="layui-input-inline" style="width: 80px;">
+                                    <input type="text" name="port" value="{{= d.port || '' }}" lay-verify="required|number" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">一般为21</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="username" value="{{= d.username || '' }}" lay-verify="required" autocomplete="off" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="password" value="{{= d.password || '' }}" autocomplete="off" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">网点</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="place" value="{{= d.place || '' }}" autocomplete="off" lay-verify="required" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">如：gzjd  用来存储到数据库</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">访问路径</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="path" value="{{= d.path || '' }}" autocomplete="off" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="set_ftp">确认保存</button>
+                                </div>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/admin/dist/lib/extend/aes.js"></script>
+<script src="/static/admin/dist/lib/extend/pad-zeropadding.js"></script>
+<script src="/static/admin/dist/controller/common-aes.js"></script>
+<script>
+    layui.use(['layer','jquery','laytpl','form'],function(){
+        var e = layui.layer, i = layui.jquery,  a = layui.form;
+        var $ = layui.jquery, laytpl = layui.laytpl;
+
+        a.render();
+        a.on("submit(set_ftp)", function(t) {
+            var data = encrypt(JSON.stringify(t.field));//将数据对象转换为json字符串
+            i.post("updateFtp",{params:data},function(res){
+                if(res.code === 0){
+                    e.msg("保存成功",{icon:1,time:1000});
+                }else{
+                    e.msg(res.msg,{icon:5,time:1000})
+                }
+            });
+        });
+
+        $.get('getFtp',function (res) {
+            if(res.code === 0){
+                if(res.data != null){
+                    var data = decrypt(res.data);
+                    laytpl(ftp.innerHTML).render(JSON.parse(data), function(html){
+                        document.getElementById('ftp_form').innerHTML = html;
+                    });
+                }
+            }else{
+                e.msg(res.msg,{icon: 5,time:1000});
+            }
+        });
+
+
+    });
+</script>

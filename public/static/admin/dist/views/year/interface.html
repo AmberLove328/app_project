@@ -1,0 +1,43 @@
+﻿<title>接口年度指标</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>指标监控(年)</cite></a>
+        <a><cite>接口年度指标</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            类型：
+                        </div>
+                        <div class="layui-inline" >
+                            <select name="type" id="type">
+                                <option value="3,0" selected>imap_下载30字正文</option>
+                                <option value="3,1">imap_下载30字正文超过20s</option>
+                                <option value="5,0">smtp_发送1M附件</option>
+                                <option value="20,0">imap_下载100封邮件头平均用时</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            日期：
+                        </div>
+                        <div class="layui-inline" >
+                            <input type="text" class="layui-input" id="searchtime" readonly>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-list" id="search" type="button"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索</button>
+                            <button class="layui-btn layuiadmin-btn-list" id="reload" type="reset"><i class="layui-icon layui-icon-refresh-1 layuiadmin-button-btn"></i>重置</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div id="container" style="height: 540px; margin-top: 5%;"></div>
+                </div>
+            </div>
+</div>
+
+<script src="/static/admin/dist/lib/extend/echarts.min.js"></script>
+<script src="/static/admin/dist/controller/interface_year.js"></script>

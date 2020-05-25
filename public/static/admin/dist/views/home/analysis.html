@@ -1,0 +1,217 @@
+﻿<title>ping日均值</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>ping日均值</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    日期：
+                </div>
+                <div class="layui-inline" >
+                    <input type="text" class="layui-input" id="searchtime" readonly>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" id="search" type="button"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索</button>
+                    <button class="layui-btn layuiadmin-btn-list" id="import_ftp" type="button"><i class="layui-icon layuiadmin-button-btn"></i>FTP导入</button>
+                    <button class="layui-btn layuiadmin-btn-list" id="import" type="button"><i class="layui-icon layuiadmin-button-btn"></i>导入文件</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div id="container" style="height: 540px; margin-top: 5%;"></div>
+        </div>
+    </div>
+</div>
+<script src="/static/admin/dist/lib/extend/echarts.min.js"></script>
+<script>
+    layui.use(['admin','form','laydate','upload'], function(){
+        var $ = layui.$
+            ,admin = layui.admin
+            ,view = layui.view
+            ,upload = layui.upload
+            ,form = layui.form;
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#searchtime', //指定元素
+            max:getNowFormatDate()
+        });
+
+        //加载图表
+        function charts(datetime) {
+            var myChart = echarts.init(document.getElementById("container"));
+            myChart.showLoading();
+            $.get('chartsPing',{pingtime:datetime}).done(function (res) {
+                if(res.code === 0){
+                    var label = {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    };
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: 'ping日均值'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['10086','163','qq']
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '6%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            name:'日期',
+                            boundaryGap: false,
+
+                            data: res.data.time
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: '耗时',
+                            axisLabel: {
+                                formatter: '{value} s'
+                            }
+                        },
+                        series: [
+                            {
+                                name:'10086',
+                                type:'bar',
+                                data:res.data.mail_139,
+                                label:label,
+                                barGap:'150%',
+                                barWidth:100
+                            },
+                            {
+                                name:'163',
+                                type:'bar',
+                                data:res.data.mail_163,
+                                label:label,
+                                barGap:'150%',
+                                barWidth:100
+                            },
+                            {
+                                name:'qq',
+                                type:'bar',
+                                data:res.data.mail_qq,
+                                label:label,
+                                barGap:'150%',
+                                barWidth:100
+                            }
+                        ]
+                    })
+                }else{
+                    layer.msg(res.msg,{icon:5,time:1000});
+                }
+            });
+
+        }
+
+        charts();
+
+
+
+        //ftp导入数据事件
+        $('#import_ftp').click(function () {
+            admin.popup({
+                title: '导入数据'
+                ,area: ['400px', '330px']
+                ,id: 'LAY-popup-data-import'
+                ,success: function(layero, index){
+                    view(this.id).render('home/import').done(function(){
+                        //监听提交
+                        form.on('submit(LAY-import-submit)', function(data){
+                            var loading = layer.msg('数据导入中，请稍后...', {icon: 16, shade: 0.3, time:0});
+                            $.post('ImportPingFtpData',{params:data.field},function (res) {
+                                layer.close(index); //执行关闭
+                                layer.close(loading); //关闭遮罩
+                                if(res.code === 0){
+                                    layer.msg('操作成功',{icon:1,time:1000});
+                                    //重载图表
+                                    charts();
+                                }else{
+                                    layer.msg(res.msg,{icon:5,time:1000});
+                                }
+                            });
+
+                        });
+                    });
+                }
+            });
+
+        });
+        
+        
+        //导入文件
+        upload.render({
+            elem: '#import',
+            url: 'UploadPingData',
+            multiple:true,
+            exts:'log',
+            size: 20*1024,  //限制最大上传20M
+            choose: function (obj) {
+                layer.msg('数据导入中，请稍后...', {icon: 16, shade: 0.3, time:0});
+            },
+            done: function (res, index, upload) {
+                layer.closeAll('loading');
+                if (res.code !== 0) {
+                    layer.msg(res.msg, {icon: 5,time:1000});
+                } else {
+                    layer.msg('操作成功', {icon: 1,time:1000});
+                }
+            },
+            error: function () {
+                layer.closeAll('loading');
+                layer.msg('导入失败', {icon: 5,time:1000});
+            },
+            accept: 'file'
+        });
+
+
+        //限制日期可选择的最大时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month
+                + seperator1 + strDate + " " + date.getHours() + seperator2
+                + date.getMinutes() + seperator2 + date.getSeconds();
+            return currentdate;
+        }
+
+        //搜索按钮点击事件
+        $('#search').click(function () {
+            charts($('#searchtime').val());
+        });
+
+
+        form.render();
+    });
+</script>
+

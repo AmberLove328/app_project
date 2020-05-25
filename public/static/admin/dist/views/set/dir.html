@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="/static/admin/dist/style/dir.css">
+<title>文件管理</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>文件管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">当前位置：<span id="tvFP" style="display: none">/</span><span id="tvFP1">/</span></div>
+        <div class="layui-card-body">
+            <div class="btnDiv">
+                <button id="btnBack" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe65c;</i>返回上级
+                </button>
+                <button id="btnHome" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe68e;</i>首页
+                </button>
+                <button id="btnRefresh" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe669;</i>刷新
+                </button>
+                <button id="btnPlusFolder" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe654;</i>新建文件夹
+                </button>
+                <button id="btnUpload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>上传文件
+                </button>
+            </div>
+            <div class="file-list">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 下拉菜单 -->
+<div class="dropdown-menu dropdown-anchor-top-left fixed" id="dropdownFile">
+    <div class="dropdown-anchor"></div>
+    <ul>
+        <li><a id="open"><i class="layui-icon">&#xe621;</i><span class="checkdown">&emsp;查看&emsp;</span></a></li>
+        <li>
+            <a id="del" style="color: red !important;">
+                <i class="layui-icon" style="font-size: 19px;">&#xe640;</i>&nbsp;&nbsp;&nbsp;删除&emsp;
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- 渲染模板 -->
+<script id="fileTpl" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <div class="file-list-item {{# if(item.isDir) { }} dir  {{# } }}" data-dir="{{item.isDir}}" data-has="{{item.hasSm}}" data-url="{{item.url}}" data-name="{{item.name}}" >
+        <div class="file-list-img">
+            {{# if(item.hasSm){ }}
+            <img src="{{item.url}}"/>
+            {{# }else{ }}
+            <img src="/static/img/fti/{{item.type}}.png" class="file-btn"/>
+            {{# } }}
+        </div>
+        <div class="file-list-name">{{item.name}}</div>
+    </div>
+    {{#  }); }}
+    {{# if(d.length<=0){ }}
+    <div class="list-empty">
+        <i class="layui-icon">&#xe664;</i>
+        <div>没有文件</div>
+    </div>
+    {{# } }}
+</script>
+
+<script type="text/javascript" src="/static/admin/dist/controller/dir.js"></script>

@@ -1,0 +1,176 @@
+﻿<title>ping超标150%</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>ping超标150%</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    竞品：
+                </div>
+                <div class="layui-inline">
+                    <select name="mail" id="mail" lay-verify="required">
+                        <option value="mail.10086.cn" selected>mail.10086.cn</option>
+                        <option value="mail.qq.com">mail.qq.com</option>
+                        <option value="mail.163.com">mail.163.com</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    日期：
+                </div>
+                <div class="layui-inline" >
+                    <input type="text" class="layui-input" id="searchtime" readonly>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" id="search" type="button"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div id="container" style="height: 540px; margin-top: 5%;"></div>
+        </div>
+    </div>
+</div>
+<script src="/static/admin/dist/lib/extend/echarts.min.js"></script>
+<script>
+    layui.use(['admin','form','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form;
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#searchtime', //指定元素
+            max:getNowFormatDate()
+        });
+
+        //加载图表
+        function charts(datetime,mail) {
+            var myChart = echarts.init(document.getElementById("container"));
+            myChart.showLoading();
+            $.get('chartsPingExceed',{pingtime:datetime,mail:mail}).done(function (res) {
+                if(res.code === 0){
+                    myChart.hideLoading();
+                    var label = {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    };
+                    var label1;
+                    if(res.data.avg === 0){
+                        label1 = {
+                            normal: {
+                                show: false
+                            }
+                        };
+                    }else{
+                        label1 = {
+                            normal: {
+                                show: true,
+                                formatter: '均值'
+                            }
+                        };
+                    }
+                    var option = {
+                        title: {
+                            text: 'ping超标150%'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '6%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: 'none'
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            }
+                        },
+                        dataZoom: [{
+
+                        },{
+                            type: 'inside'
+                        }],
+                        xAxis: {
+                            type: 'category',
+                            name:'日期',
+                            boundaryGap: false,
+                            data: res.data.pingtime || ''
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: '耗时',
+                            axisLabel: {
+                                formatter: '{value} s'
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        series: [
+                            {
+                                name:res.data.title,
+                                type:'line',
+                                data:res.data.usetime || 0,
+                                label:label,
+                                markLine: {
+                                    silent: true,
+                                    data: [{
+                                        yAxis: res.data.avg || 0
+                                    }],
+                                    label:label1
+                                }
+                            }
+                        ]
+                    };
+                    myChart.setOption(option,true)
+                }else{
+                    layer.msg(res.msg,{icon:5,time:1000});
+                }
+            });
+
+        }
+
+        charts();
+
+        //限制日期可选择的最大时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month
+                + seperator1 + strDate + " " + date.getHours() + seperator2
+                + date.getMinutes() + seperator2 + date.getSeconds();
+            return currentdate;
+        }
+
+        //搜索按钮点击事件
+        $('#search').click(function () {
+            charts($('#searchtime').val(),$('#mail').val());
+        });
+
+
+        form.render();
+    });
+</script>
+

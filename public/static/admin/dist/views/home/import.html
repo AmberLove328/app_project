@@ -1,0 +1,61 @@
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-inline" >
+            <input type="text" class="layui-input" name="pingtime" id="pingtime" lay-verify="required" autocomplete="off" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">竞品</label>
+        <div class="layui-input-inline">
+            <select name="mail" id="mail" lay-verify="required">
+                <option value="mail.10086.cn" selected>mail.10086.cn</option>
+                <option value="mail.qq.com">mail.qq.com</option>
+                <option value="mail.163.com">mail.163.com</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="LAY-import-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form','laydate'], function(){
+        var form = layui.form
+            ,laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#pingtime', //指定元素
+            max:getNowFormatDate()
+        });
+
+        //限制最大只能选今天
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month
+                + seperator1 + strDate + " " + date.getHours() + seperator2
+                + date.getMinutes() + seperator2 + date.getSeconds();
+            return currentdate;
+        }
+
+
+        form.render();
+    });
+</script>

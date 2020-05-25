@@ -1,0 +1,65 @@
+<title>网站设置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>网站设置</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">网站设置</div>
+                <div class="layui-card-body" pad15>
+                    <div class="layui-form" wid100 lay-filter="">
+                        <script type="text/html" template lay-url="getConf">
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">首页+logo标题</label>
+                                <div class="layui-input-block">
+                                    <textarea name="title" lay-verify="required" class="layui-textarea">{{= d.data.title || '' }}</textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">缓存时间</label>
+                                <div class="layui-input-inline" style="width: 80px;">
+                                    <input type="text" name="cache"  lay-verify="required|number" value="{{= d.data.cache || '' }}" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline layui-input-company">分钟</div>
+                                <div class="layui-form-mid layui-word-aux">图表的缓存时间，0表示不缓存</div>
+                            </div>
+
+                       </script>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="set_website">确认保存</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['layer','jquery','laytpl','form'],function(){
+        var  e = layui.layer, i = layui.jquery,  a = layui.form;
+
+        a.on("submit(set_website)", function(t) {
+            i.post("updateConf",{params:t.field},function(res){
+                if(res.code === 0){
+                    e.msg("保存成功",{icon:1,time:1000});
+                }else{
+                    e.msg(res.msg,{icon:5,time:1000})
+                }
+            });
+        });
+
+        a.render();
+
+
+
+    });
+</script>

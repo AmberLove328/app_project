@@ -1,0 +1,56 @@
+﻿<title>IMAP/SMTP接口性能指标排名</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>IMAP/SMTP接口性能指标排名</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            开始日期：
+                        </div>
+                        <div class="layui-inline" >
+                            <input type="text" class="layui-input" id="startTime" readonly>
+                        </div>
+                        <div class="layui-inline">
+                            结束日期：
+                        </div>
+                        <div class="layui-inline" >
+                            <input type="text" class="layui-input" id="endTime" readonly>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-list" id="search" type="button"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索</button>
+                            <button class="layui-btn layuiadmin-btn-list" id="export" type="button"><i class="layui-icon layui-icon-export layuiadmin-button-btn"></i>导出</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                        <table class="layui-table" id="charts_order" style="width: 98%;">
+                            <h4 style="margin-top: 1.5%;">139邮箱排名</h4>
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;">imap_下载30字正文时长</th>
+                                <th style="text-align: center;">imap_下载30字正文超过20S指标</th>
+                                <th style="text-align: center;">smtp_发送1M附件时长</th>
+								<th style="text-align: center;">imap_下载100封邮件头平均用时</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr style="text-align: center;">
+                                <td>暂无排名</td>
+                                <td>暂无失败指标</td>
+                                <td>暂无排名</td>
+                                <td>暂无排名</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    <div id="container" style="height: 500px; margin-top: 3%;"></div>
+                </div>
+            </div>
+</div>
+<script src="/static/admin/dist/lib/extend/echarts.min.js"></script>
+<script src="/static/admin/dist/controller/homepage1.js"></script>
+

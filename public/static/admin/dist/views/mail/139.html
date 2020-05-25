@@ -1,0 +1,59 @@
+﻿<title>139邮箱指标</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>邮箱指标</cite></a>
+        <a><cite>139邮箱指标</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    网点：
+                </div>
+                <div class="layui-inline" >
+                    <select name="place" id="place">
+                        <option value="web_gzjd" selected>广州基地</option>
+                        <option value="web_gzct">广州彩讯</option>
+                        <option value="web_szct">深圳彩讯</option>
+                        <option value="web_bjlt">北京彩讯</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    类型：
+                </div>
+                <div class="layui-inline" >
+                    <select name="type" id="type">
+                        <option value="1" selected>打开首页</option>
+                        <option value="2">邮箱登录</option>
+                        <option value="3">打开写信页</option>
+                        <option value="6">读邮件</option>
+                        <option value="7">下载1M附件</option>
+                        <option value="9">搜索邮件</option>
+                        <option value="12">接收外域</option>
+                        <option value="108">超大附件上传</option>
+                        <option value="109">超大附件下载</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    日期：
+                </div>
+                <div class="layui-inline" >
+                    <input type="text" class="layui-input" id="searchtime" readonly>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" id="search" type="button"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索</button>
+                    <button class="layui-btn layuiadmin-btn-list" id="reload" type="reset"><i class="layui-icon layui-icon-refresh-1 layuiadmin-button-btn"></i>重置</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div id="container" style="height: 540px; margin-top: 5%;"></div>
+        </div>
+    </div>
+</div>
+<script src="/static/admin/dist/lib/extend/echarts.min.js"></script>
+<script src="/static/admin/dist/controller/mail139.js"></script>
+
