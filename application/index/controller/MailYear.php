@@ -7,34 +7,38 @@
  */
 
 namespace app\index\controller;
+
 use think\Cache;
 use think\Controller;
 use app\index\controller\Api as api;
+use think\response\Json;
+
 class MailYear extends Controller
 {
 
     /**
      * 标准版性能指标接口
-     * @return array
+     * @return Json
      */
-    public function chartsYearStandard(){
-        if(!empty($_GET['createtime'])){
-            $whereTime = array($_GET['createtime'].'-01-01 00:00:00',date('Y',strtotime(($_GET['createtime']+1).date("-m-d G:i:s",$_GET['createtime']))).'-01-01 00:00:00');
+    public function chartsYearStandard()
+    {
+        if (!empty($_GET['createtime'])) {
+            $whereTime = array($_GET['createtime'] . '-01-01 00:00:00', date('Y', strtotime(($_GET['createtime'] + 1) . date("-m-d G:i:s", $_GET['createtime']))) . '-01-01 00:00:00');
             $eTime = $_GET['createtime'];
-        }else{
-            $whereTime = array(date('Y',time()).'-01-01 00:00:00',date('Y',strtotime((date('Y',time())+1).date("-m-d G:i:s",date('Y',time())))).'-01-01 00:00:00');
-            $eTime = date('Y',time());
+        } else {
+            $whereTime = array(date('Y', time()) . '-01-01 00:00:00', date('Y', strtotime((date('Y', time()) + 1) . date("-m-d G:i:s", date('Y', time())))) . '-01-01 00:00:00');
+            $eTime = date('Y', time());
         }
         !empty($_GET['type']) ? $type = $_GET['type'] : $type = 1;
         $cache = new Conf();
         $result = $cache->getSiteConf();
-        if(empty($result['cache']) || $result['cache'] == null || intval($result['cache']) <= 0){
+        if (empty($result['cache']) || $result['cache'] == null || intval($result['cache']) <= 0) {
             $commonYear = new CommonYear();
             $common = new CommonStandard();
-            $whereTimeBefore = array($whereTime['0'],date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")));
-            $whereTimeAfter = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")),$whereTime['1']);
-            $dataBefore = $commonYear->chartsDataAllStandard($whereTimeBefore,$type);
-            $dataAfter = $commonYear->chartsDataAllStandard($whereTimeAfter,$type);
+            $whereTimeBefore = array($whereTime['0'], date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")));
+            $whereTimeAfter = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")), $whereTime['1']);
+            $dataBefore = $commonYear->chartsDataAllStandard($whereTimeBefore, $type);
+            $dataAfter = $commonYear->chartsDataAllStandard($whereTimeAfter, $type);
             $data = $commonYear->chartsAllStandard(
                 $commonYear->yearData($commonYear->avgChartsData($common->data_139_3($dataBefore)) + $commonYear->avgChartsData($common->data_139_3($dataAfter))),
                 $commonYear->yearData($commonYear->avgChartsData($common->data_139_6($dataBefore)) + $commonYear->avgChartsData($common->data_139_6($dataAfter))),
@@ -45,16 +49,16 @@ class MailYear extends Controller
                 $commonYear->yearData($commonYear->avgChartsData($common->data_sina($dataBefore)) + $commonYear->avgChartsData($common->data_sina($dataAfter))),
                 $type
             );
-        }else{
-            if(Cache::get($type.'yearStandard'.$eTime)){
-                $data = Cache::get($type.'yearStandard'.$eTime);
-            }else{
+        } else {
+            if (Cache::get($type . 'yearStandard' . $eTime)) {
+                $data = Cache::get($type . 'yearStandard' . $eTime);
+            } else {
                 $commonYear = new CommonYear();
                 $common = new CommonStandard();
-                $whereTimeBefore = array($whereTime['0'],date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")));
-                $whereTimeAfter = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")),$whereTime['1']);
-                $dataBefore = $commonYear->chartsDataAllStandard($whereTimeBefore,$type);
-                $dataAfter = $commonYear->chartsDataAllStandard($whereTimeAfter,$type);
+                $whereTimeBefore = array($whereTime['0'], date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")));
+                $whereTimeAfter = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")), $whereTime['1']);
+                $dataBefore = $commonYear->chartsDataAllStandard($whereTimeBefore, $type);
+                $dataAfter = $commonYear->chartsDataAllStandard($whereTimeAfter, $type);
                 $data = $commonYear->chartsAllStandard(
                     $commonYear->yearData($commonYear->avgChartsData($common->data_139_3($dataBefore)) + $commonYear->avgChartsData($common->data_139_3($dataAfter))),
                     $commonYear->yearData($commonYear->avgChartsData($common->data_139_6($dataBefore)) + $commonYear->avgChartsData($common->data_139_6($dataAfter))),
@@ -65,7 +69,7 @@ class MailYear extends Controller
                     $commonYear->yearData($commonYear->avgChartsData($common->data_sina($dataBefore)) + $commonYear->avgChartsData($common->data_sina($dataAfter))),
                     $type
                 );
-                Cache::set($type.'yearStandard'.$eTime,$data,$result['cache']*60);
+                Cache::set($type . 'yearStandard' . $eTime, $data, $result['cache'] * 60);
             }
         }
         $api = new api();
@@ -75,32 +79,33 @@ class MailYear extends Controller
 
     /**
      * imap/smtp接口性能指标
-     * @return array
+     * @return Json
      */
-    public function chartsYearInterface(){
-        if(!empty($_GET['createtime'])){
-            $whereTime = array($_GET['createtime'].'-01-01 00:00:00',date('Y',strtotime(($_GET['createtime']+1).date("-m-d G:i:s",$_GET['createtime']))).'-01-01 00:00:00');
+    public function chartsYearInterface()
+    {
+        if (!empty($_GET['createtime'])) {
+            $whereTime = array($_GET['createtime'] . '-01-01 00:00:00', date('Y', strtotime(($_GET['createtime'] + 1) . date("-m-d G:i:s", $_GET['createtime']))) . '-01-01 00:00:00');
             $eTime = $_GET['createtime'];
-        } else{
-            $whereTime = array(date('Y',time()).'-01-01 00:00:00',date('Y',strtotime((date('Y',time())+1).date("-m-d G:i:s",date('Y',time())))).'-01-01 00:00:00');
-            $eTime = date('Y',time());
+        } else {
+            $whereTime = array(date('Y', time()) . '-01-01 00:00:00', date('Y', strtotime((date('Y', time()) + 1) . date("-m-d G:i:s", date('Y', time())))) . '-01-01 00:00:00');
+            $eTime = date('Y', time());
         }
         !empty($_GET['type']) ? $type = $_GET['type'] : $type = 3;
-        !empty($_GET['overtime']) ? $overtime = $_GET['overtime'] : $overtime=0;
+        !empty($_GET['overtime']) ? $overtime = $_GET['overtime'] : $overtime = 0;
         $cache = new Conf();
         $result = $cache->getSiteConf();
-        if(empty($result['cache']) || $result['cache'] == null || intval($result['cache']) <= 0){
+        if (empty($result['cache']) || $result['cache'] == null || intval($result['cache']) <= 0) {
             $commonMonth = new CommonMonth();
             $commonYear = new CommonYear();
-            $whereTimeQ1 = array($whereTime['0'],date('Y-m-d H:i:s',strtotime($whereTime['0']."+3 month")));
-            $whereTimeQ2 = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+3 month")),date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")));
-            $whereTimeQ3 = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")),date('Y-m-d H:i:s',strtotime($whereTime['0']."+9 month")));
-            $whereTimeQ4 = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+9 month")),$whereTime['1']);
-            $dataQ1 = $commonYear->chartsDataAllInterface($whereTimeQ1,$type,$overtime);
-            $dataQ2 = $commonYear->chartsDataAllInterface($whereTimeQ2,$type,$overtime);
-            $dataQ3 = $commonYear->chartsDataAllInterface($whereTimeQ3,$type,$overtime);
-            $dataQ4 = $commonYear->chartsDataAllInterface($whereTimeQ4,$type,$overtime);
-            if($type == 3 || $type == 20){
+            $whereTimeQ1 = array($whereTime['0'], date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+3 month")));
+            $whereTimeQ2 = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+3 month")), date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")));
+            $whereTimeQ3 = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")), date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+9 month")));
+            $whereTimeQ4 = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+9 month")), $whereTime['1']);
+            $dataQ1 = $commonYear->chartsDataAllInterface($whereTimeQ1, $type, $overtime);
+            $dataQ2 = $commonYear->chartsDataAllInterface($whereTimeQ2, $type, $overtime);
+            $dataQ3 = $commonYear->chartsDataAllInterface($whereTimeQ3, $type, $overtime);
+            $dataQ4 = $commonYear->chartsDataAllInterface($whereTimeQ4, $type, $overtime);
+            if ($type == 3 || $type == 20) {
                 $avg_139 = $commonYear->avgChartsData($commonMonth->data_139_imap($dataQ1)) +
                     $commonYear->avgChartsData($commonMonth->data_139_imap($dataQ2)) +
                     $commonYear->avgChartsData($commonMonth->data_139_imap($dataQ3)) +
@@ -121,7 +126,7 @@ class MailYear extends Controller
                     $commonYear->avgChartsData($commonMonth->data_sina_imap($dataQ2)) +
                     $commonYear->avgChartsData($commonMonth->data_sina_imap($dataQ3)) +
                     $commonYear->avgChartsData($commonMonth->data_sina_imap($dataQ4));
-            }else{
+            } else {
                 $avg_139 = $commonYear->avgChartsData($commonMonth->data_139_smtp($dataQ1)) +
                     $commonYear->avgChartsData($commonMonth->data_139_smtp($dataQ2)) +
                     $commonYear->avgChartsData($commonMonth->data_139_smtp($dataQ3)) +
@@ -152,21 +157,21 @@ class MailYear extends Controller
                 $type,
                 $overtime
             );
-        }else{
-            if(Cache::get($type.$overtime.'yearInterface'.$eTime)){
-                $data = Cache::get($type.$overtime.'yearInterface'.$eTime);
-            }else{
+        } else {
+            if (Cache::get($type . $overtime . 'yearInterface' . $eTime)) {
+                $data = Cache::get($type . $overtime . 'yearInterface' . $eTime);
+            } else {
                 $commonMonth = new CommonMonth();
                 $commonYear = new CommonYear();
-                $whereTimeQ1 = array($whereTime['0'],date('Y-m-d H:i:s',strtotime($whereTime['0']."+3 month")));
-                $whereTimeQ2 = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+3 month")),date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")));
-                $whereTimeQ3 = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")),date('Y-m-d H:i:s',strtotime($whereTime['0']."+9 month")));
-                $whereTimeQ4 = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+9 month")),$whereTime['1']);
-                $dataQ1 = $commonYear->chartsDataAllInterface($whereTimeQ1,$type,$overtime);
-                $dataQ2 = $commonYear->chartsDataAllInterface($whereTimeQ2,$type,$overtime);
-                $dataQ3 = $commonYear->chartsDataAllInterface($whereTimeQ3,$type,$overtime);
-                $dataQ4 = $commonYear->chartsDataAllInterface($whereTimeQ4,$type,$overtime);
-                if($type == 3 || $type == 20){
+                $whereTimeQ1 = array($whereTime['0'], date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+3 month")));
+                $whereTimeQ2 = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+3 month")), date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")));
+                $whereTimeQ3 = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")), date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+9 month")));
+                $whereTimeQ4 = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+9 month")), $whereTime['1']);
+                $dataQ1 = $commonYear->chartsDataAllInterface($whereTimeQ1, $type, $overtime);
+                $dataQ2 = $commonYear->chartsDataAllInterface($whereTimeQ2, $type, $overtime);
+                $dataQ3 = $commonYear->chartsDataAllInterface($whereTimeQ3, $type, $overtime);
+                $dataQ4 = $commonYear->chartsDataAllInterface($whereTimeQ4, $type, $overtime);
+                if ($type == 3 || $type == 20) {
                     $avg_139 = $commonYear->avgChartsData($commonMonth->data_139_imap($dataQ1)) +
                         $commonYear->avgChartsData($commonMonth->data_139_imap($dataQ2)) +
                         $commonYear->avgChartsData($commonMonth->data_139_imap($dataQ3)) +
@@ -187,7 +192,7 @@ class MailYear extends Controller
                         $commonYear->avgChartsData($commonMonth->data_sina_imap($dataQ2)) +
                         $commonYear->avgChartsData($commonMonth->data_sina_imap($dataQ3)) +
                         $commonYear->avgChartsData($commonMonth->data_sina_imap($dataQ4));
-                }else{
+                } else {
                     $avg_139 = $commonYear->avgChartsData($commonMonth->data_139_smtp($dataQ1)) +
                         $commonYear->avgChartsData($commonMonth->data_139_smtp($dataQ2)) +
                         $commonYear->avgChartsData($commonMonth->data_139_smtp($dataQ3)) +
@@ -218,7 +223,7 @@ class MailYear extends Controller
                     $type,
                     $overtime
                 );
-                Cache::set($type.$overtime.'yearInterface'.$eTime,$data,$result['cache']*60);
+                Cache::set($type . $overtime . 'yearInterface' . $eTime, $data, $result['cache'] * 60);
             }
         }
 
@@ -229,26 +234,27 @@ class MailYear extends Controller
 
     /**
      * 酷版性能指标
-     * @return array
+     * @return Json
      */
-    public function chartsYearCool(){
-        if(!empty($_GET['createtime'])){
-            $whereTime = array($_GET['createtime'].'-01-01 00:00:00',date('Y',strtotime(($_GET['createtime']+1).date("-m-d G:i:s",$_GET['createtime']))).'-01-01 00:00:00');
+    public function chartsYearCool()
+    {
+        if (!empty($_GET['createtime'])) {
+            $whereTime = array($_GET['createtime'] . '-01-01 00:00:00', date('Y', strtotime(($_GET['createtime'] + 1) . date("-m-d G:i:s", $_GET['createtime']))) . '-01-01 00:00:00');
             $eTime = $_GET['createtime'];
-        }else{
-            $whereTime = array(date('Y',time()).'-01-01 00:00:00',date('Y',strtotime((date('Y',time())+1).date("-m-d G:i:s",date('Y',time())))).'-01-01 00:00:00');
-            $eTime = date('Y',time());
+        } else {
+            $whereTime = array(date('Y', time()) . '-01-01 00:00:00', date('Y', strtotime((date('Y', time()) + 1) . date("-m-d G:i:s", date('Y', time())))) . '-01-01 00:00:00');
+            $eTime = date('Y', time());
         }
         !empty($_GET['type']) ? $type = $_GET['type'] : $type = 2;
         $cache = new Conf();
         $result = $cache->getSiteConf();
-        if(empty($result['cache']) || $result['cache'] == null || intval($result['cache']) <= 0){
+        if (empty($result['cache']) || $result['cache'] == null || intval($result['cache']) <= 0) {
             $commonYear = new CommonYear();
             $common = new CommonCool();
-            $whereTimeBefore = array($whereTime['0'],date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")));
-            $whereTimeAfter = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")),$whereTime['1']);
-            $dataBefore = $commonYear->chartsDataAllCool($whereTimeBefore,$type);
-            $dataAfter = $commonYear->chartsDataAllCool($whereTimeAfter,$type);
+            $whereTimeBefore = array($whereTime['0'], date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")));
+            $whereTimeAfter = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")), $whereTime['1']);
+            $dataBefore = $commonYear->chartsDataAllCool($whereTimeBefore, $type);
+            $dataAfter = $commonYear->chartsDataAllCool($whereTimeAfter, $type);
             $data = $commonYear->chartsAllCool(
                 $commonYear->yearData($commonYear->avgChartsData($common->data_139($dataBefore)) + $commonYear->avgChartsData($common->data_139($dataAfter))),
                 $commonYear->yearData($commonYear->avgChartsData($common->data_163($dataBefore)) + $commonYear->avgChartsData($common->data_163($dataAfter))),
@@ -257,16 +263,16 @@ class MailYear extends Controller
                 $commonYear->yearData($commonYear->avgChartsData($common->data_sina($dataBefore)) + $commonYear->avgChartsData($common->data_sina($dataAfter))),
                 $type
             );
-        }else{
-            if(Cache::get($type.'yearCool'.$eTime)){
-                $data = Cache::get($type.'yearCool'.$eTime);
-            }else{
+        } else {
+            if (Cache::get($type . 'yearCool' . $eTime)) {
+                $data = Cache::get($type . 'yearCool' . $eTime);
+            } else {
                 $commonYear = new CommonYear();
                 $common = new CommonCool();
-                $whereTimeBefore = array($whereTime['0'],date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")));
-                $whereTimeAfter = array(date('Y-m-d H:i:s',strtotime($whereTime['0']."+6 month")),$whereTime['1']);
-                $dataBefore = $commonYear->chartsDataAllCool($whereTimeBefore,$type);
-                $dataAfter = $commonYear->chartsDataAllCool($whereTimeAfter,$type);
+                $whereTimeBefore = array($whereTime['0'], date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")));
+                $whereTimeAfter = array(date('Y-m-d H:i:s', strtotime($whereTime['0'] . "+6 month")), $whereTime['1']);
+                $dataBefore = $commonYear->chartsDataAllCool($whereTimeBefore, $type);
+                $dataAfter = $commonYear->chartsDataAllCool($whereTimeAfter, $type);
                 $data = $commonYear->chartsAllCool(
                     $commonYear->yearData($commonYear->avgChartsData($common->data_139($dataBefore)) + $commonYear->avgChartsData($common->data_139($dataAfter))),
                     $commonYear->yearData($commonYear->avgChartsData($common->data_163($dataBefore)) + $commonYear->avgChartsData($common->data_163($dataAfter))),
@@ -275,7 +281,7 @@ class MailYear extends Controller
                     $commonYear->yearData($commonYear->avgChartsData($common->data_sina($dataBefore)) + $commonYear->avgChartsData($common->data_sina($dataAfter))),
                     $type
                 );
-                Cache::set($type.'yearCool'.$eTime,$data,$result['cache']*60);
+                Cache::set($type . 'yearCool' . $eTime, $data, $result['cache'] * 60);
             }
         }
 

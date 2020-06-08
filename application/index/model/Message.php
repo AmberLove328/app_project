@@ -7,6 +7,7 @@
  */
 
 namespace app\index\model;
+
 use think\Model;
 
 class Message extends Model
@@ -17,7 +18,8 @@ class Message extends Model
      * @return int
      * @throws
      */
-    public function saveData($data){
+    public function saveData($data)
+    {
         return $this->insertAll($data);
     }
 
@@ -27,8 +29,9 @@ class Message extends Model
      * @return int
      * @throws
      */
-    public function deleteData($where){
-        return $this->whereIn('id',$where)->delete();
+    public function deleteData($where)
+    {
+        return $this->whereIn('id', $where)->delete();
 
     }
 
@@ -38,8 +41,9 @@ class Message extends Model
      * @return $this
      * @throws
      */
-    public function saveDataAll($where){
-        return $this->whereIn('id',$where)->update(['status' => 1]);
+    public function saveDataAll($where)
+    {
+        return $this->whereIn('id', $where)->update(['status' => 1]);
     }
 
 
@@ -49,7 +53,8 @@ class Message extends Model
      * @return object
      * @throws
      */
-    public function selectAll($limit){
+    public function selectAll($limit)
+    {
         return $this->limit($limit)->order('time DESC,status,competitor')->select();
     }
 
@@ -58,7 +63,8 @@ class Message extends Model
      * @return $this
      * @throws
      */
-    public function updateAll(){
+    public function updateAll()
+    {
         return $this->where('status', 0)->update(['status' => 1]);
     }
 
@@ -69,7 +75,8 @@ class Message extends Model
      * @return int
      * @throws
      */
-    public function selectCount($where=[]){
+    public function selectCount($where = [])
+    {
         return Message::where($where)->count();
     }
 

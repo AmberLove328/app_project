@@ -7,6 +7,7 @@
  */
 
 namespace app\index\controller;
+
 use think\Controller;
 use think\Loader;
 
@@ -20,9 +21,10 @@ class CommonStandard extends Controller
      * @param string $place
      * @return array
      */
-    public function charts_data_all($whereTime, $place){
-        $where = ['status'=>['=','0'], 'place'=>['=',$place]];
-        $data = Loader::model('Webmail')->selectallfiled($where,$whereTime,'type,mailsp,usetime,createtime');
+    public function charts_data_all($whereTime, $place)
+    {
+        $where = ['status' => ['=', '0'], 'place' => ['=', $place]];
+        $data = Loader::model('Webmail')->selectallfiled($where, $whereTime, 'type,mailsp,usetime,createtime');
         return collection($data)->toArray(); //将对象转换成数组返回
 
     }
@@ -34,9 +36,10 @@ class CommonStandard extends Controller
      * @param string $type
      * @return array
      */
-    public function charts_data_139($whereTime,$type ,$place){
-        $where = ['mailsp'=>['like','%'.'139'.'%'],'status'=>['=','0'], 'place'=>['=',$place],'type'=>['=',$type]];
-        $data = Loader::model('Webmail')->selectFiled($where,$whereTime,'mailsp,createtime,usetime');
+    public function charts_data_139($whereTime, $type, $place)
+    {
+        $where = ['mailsp' => ['like', '%' . '139' . '%'], 'status' => ['=', '0'], 'place' => ['=', $place], 'type' => ['=', $type]];
+        $data = Loader::model('Webmail')->selectFiled($where, $whereTime, 'mailsp,createtime,usetime');
         return collection($data)->toArray(); //将对象转换成数组返回
     }
 
@@ -47,9 +50,10 @@ class CommonStandard extends Controller
      * @param string $place
      * @return array
      */
-    public function charts_data_189($whereTime,$type, $place){
-        $where = ['mailsp'=>['=','189.cn'],'status'=>['=','0'], 'place'=>['=',$place],'type'=>['=',$type]];
-        $data = Loader::model('Webmail')->selectFiled($where,$whereTime,'mailsp,usetime,createtime');
+    public function charts_data_189($whereTime, $type, $place)
+    {
+        $where = ['mailsp' => ['=', '189.cn'], 'status' => ['=', '0'], 'place' => ['=', $place], 'type' => ['=', $type]];
+        $data = Loader::model('Webmail')->selectFiled($where, $whereTime, 'mailsp,usetime,createtime');
         return collection($data)->toArray(); //将对象转换成数组返回
     }
 
@@ -60,9 +64,10 @@ class CommonStandard extends Controller
      * @param string $place
      * @return array
      */
-    public function charts_data_163($whereTime,$type,$place){
-        $where = ['mailsp'=>['=','163.com'],'status'=>['=','0'], 'place'=>['=',$place],'type'=>['=',$type]];
-        $data = Loader::model('Webmail')->selectFiled($where,$whereTime,'mailsp,usetime,createtime');
+    public function charts_data_163($whereTime, $type, $place)
+    {
+        $where = ['mailsp' => ['=', '163.com'], 'status' => ['=', '0'], 'place' => ['=', $place], 'type' => ['=', $type]];
+        $data = Loader::model('Webmail')->selectFiled($where, $whereTime, 'mailsp,usetime,createtime');
         return collection($data)->toArray(); //将对象转换成数组返回
     }
 
@@ -73,9 +78,10 @@ class CommonStandard extends Controller
      * @param string $place
      * @return array
      */
-    public function charts_data_qq($whereTime,$type,$place){
-        $where = ['mailsp'=>['=','qq.com'],'status'=>['=','0'], 'place'=>['=',$place],'type'=>['=',$type]];
-        $data = Loader::model('Webmail')->selectFiled($where,$whereTime,'mailsp,usetime,createtime');
+    public function charts_data_qq($whereTime, $type, $place)
+    {
+        $where = ['mailsp' => ['=', 'qq.com'], 'status' => ['=', '0'], 'place' => ['=', $place], 'type' => ['=', $type]];
+        $data = Loader::model('Webmail')->selectFiled($where, $whereTime, 'mailsp,usetime,createtime');
         return collection($data)->toArray(); //将对象转换成数组返回
     }
 
@@ -86,9 +92,10 @@ class CommonStandard extends Controller
      * @param string $place
      * @return array
      */
-    public function charts_data_sina($whereTime,$type,$place){
-        $where = ['mailsp'=>['=','sina.com'],'status'=>['=','0'], 'place'=>['=',$place],'type'=>['=',$type]];
-        $data = Loader::model('Webmail')->selectFiled($where,$whereTime,'mailsp,usetime,createtime');
+    public function charts_data_sina($whereTime, $type, $place)
+    {
+        $where = ['mailsp' => ['=', 'sina.com'], 'status' => ['=', '0'], 'place' => ['=', $place], 'type' => ['=', $type]];
+        $data = Loader::model('Webmail')->selectFiled($where, $whereTime, 'mailsp,usetime,createtime');
         return collection($data)->toArray(); //将对象转换成数组返回
     }
 
@@ -98,11 +105,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_139_hui($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_139_hui($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != '139.com_hui'){
+                if ($v['mailsp'] != '139.com_hui') {
                     unset($arr[$key]);
                 }
             }
@@ -115,11 +123,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_139_3($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_139_3($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != '139.com_3.0'){
+                if ($v['mailsp'] != '139.com_3.0') {
                     unset($arr[$key]);
                 }
             }
@@ -132,11 +141,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_139_6($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_139_6($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != '139.com_6.0'){
+                if ($v['mailsp'] != '139.com_6.0') {
                     unset($arr[$key]);
                 }
             }
@@ -150,11 +160,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_189($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_189($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != '189.cn'){
+                if ($v['mailsp'] != '189.cn') {
                     unset($arr[$key]);
                 }
             }
@@ -168,11 +179,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_163($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_163($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != '163.com'){
+                if ($v['mailsp'] != '163.com') {
                     unset($arr[$key]);
                 }
             }
@@ -186,11 +198,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_qq($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_qq($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != 'qq.com'){
+                if ($v['mailsp'] != 'qq.com') {
                     unset($arr[$key]);
                 }
             }
@@ -204,11 +217,12 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function data_sina($arr=[]){
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
+    public function data_sina($arr = [])
+    {
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
                 //过滤掉其他数据且用时为0不计入均值
-                if($v['mailsp'] != 'sina.com'){
+                if ($v['mailsp'] != 'sina.com') {
                     unset($arr[$key]);
                 }
             }
@@ -223,15 +237,16 @@ class CommonStandard extends Controller
      * @param string $time
      * @return array
      */
-    public function chartsData(array $arr,$type,$time){
-        $data=[];
+    public function chartsData(array $arr, $type, $time)
+    {
+        $data = [];
         $data['title'] = $this->getTypeTitle($type);
-        if(!empty($arr)){
-            $data['createtime'] = array_column($arr,"createtime");  //将多个数组转换成一个数组
-            $data['usetime'] = array_column($arr,"usetime");  //将多个数组转换成一个数组
-        }else{
+        if (!empty($arr)) {
+            $data['createtime'] = array_column($arr, "createtime");  //将多个数组转换成一个数组
+            $data['usetime'] = array_column($arr, "usetime");  //将多个数组转换成一个数组
+        } else {
             $data['createtime'] = [$time];
-            $data['usetime'] = [number_format(0,2)];
+            $data['usetime'] = [number_format(0, 2)];
         }
 
         return $data;
@@ -243,8 +258,9 @@ class CommonStandard extends Controller
      * @param string $type
      * @return string
      */
-    public function getTypeTitle($type){
-        switch ($type){
+    public function getTypeTitle($type)
+    {
+        switch ($type) {
             case '1':
                 return "打开首页";
             case '2':
@@ -279,17 +295,18 @@ class CommonStandard extends Controller
      * @param array $arr_sina
      * @return array
      */
-    public function data_avg($arr_139=[],$arr_163=[],$arr_189=[],$arr_qq=[],$arr_sina=[]){
+    public function data_avg($arr_139 = [], $arr_163 = [], $arr_189 = [], $arr_qq = [], $arr_sina = [])
+    {
         return [
-            $this->dataAvg([$arr_139[0],$arr_163[0],$arr_189[0],$arr_qq[0],$arr_sina[0]]),
-            $this->dataAvg([$arr_139[1],$arr_163[1],$arr_189[1],$arr_qq[1],$arr_sina[1]]),
-            $this->dataAvg([$arr_139[2],$arr_163[2],$arr_189[2],$arr_qq[2],$arr_sina[2]]),
-            $this->dataAvg([$arr_139[3],$arr_163[3],$arr_189[3],$arr_qq[3],$arr_sina[3]]),
-            $this->dataAvg([$arr_139[4],$arr_163[4],$arr_189[4],$arr_qq[4],$arr_sina[4]]),
-            $this->dataAvg([$arr_139[5],$arr_163[5],$arr_189[5],$arr_qq[5],$arr_sina[5]]),
-            $this->dataAvg([$arr_139[6],$arr_163[6],$arr_189[6],$arr_qq[6],$arr_sina[6]]),
-            $this->dataAvg([$arr_139[7],$arr_163[7],$arr_189[7],$arr_qq[7],$arr_sina[7]]),
-            $this->dataAvg([$arr_139[8],$arr_163[8],$arr_189[8],$arr_qq[8],$arr_sina[8]]),
+            $this->dataAvg([$arr_139[0], $arr_163[0], $arr_189[0], $arr_qq[0], $arr_sina[0]]),
+            $this->dataAvg([$arr_139[1], $arr_163[1], $arr_189[1], $arr_qq[1], $arr_sina[1]]),
+            $this->dataAvg([$arr_139[2], $arr_163[2], $arr_189[2], $arr_qq[2], $arr_sina[2]]),
+            $this->dataAvg([$arr_139[3], $arr_163[3], $arr_189[3], $arr_qq[3], $arr_sina[3]]),
+            $this->dataAvg([$arr_139[4], $arr_163[4], $arr_189[4], $arr_qq[4], $arr_sina[4]]),
+            $this->dataAvg([$arr_139[5], $arr_163[5], $arr_189[5], $arr_qq[5], $arr_sina[5]]),
+            $this->dataAvg([$arr_139[6], $arr_163[6], $arr_189[6], $arr_qq[6], $arr_sina[6]]),
+            $this->dataAvg([$arr_139[7], $arr_163[7], $arr_189[7], $arr_qq[7], $arr_sina[7]]),
+            $this->dataAvg([$arr_139[8], $arr_163[8], $arr_189[8], $arr_qq[8], $arr_sina[8]]),
         ];
     }
 
@@ -298,21 +315,21 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return string
      */
-    private function dataAvg(array $arr){
+    private function dataAvg(array $arr)
+    {
         $avg = '';
-        if(!empty($arr)){
+        if (!empty($arr)) {
             $i = 0;
-            foreach ($arr as $v){
-                if($v != 0 && $v != null){
+            foreach ($arr as $v) {
+                if ($v != 0 && $v != null) {
                     $i = $i + 1;
                 }
             }
-            $i == 0 ? $avg = number_format(0,2) : $avg =  number_format(floor(array_sum($arr)/$i*100)/100,2);
+            $i == 0 ? $avg = number_format(0, 2) : $avg = number_format(floor(array_sum($arr) / $i * 100) / 100, 2);
         }
         return $avg;
 
     }
-
 
 
     /**
@@ -324,22 +341,23 @@ class CommonStandard extends Controller
      * @param array $arr_sina
      * @return array
      */
-    public function data_order($arr_139=[],$arr_163=[],$arr_189=[],$arr_qq=[],$arr_sina=[]){
-        if(!empty($arr_139)){
+    public function data_order($arr_139 = [], $arr_163 = [], $arr_189 = [], $arr_qq = [], $arr_sina = [])
+    {
+        if (!empty($arr_139)) {
             $data = [
-                $this->dataOrder($arr_139[0],[$arr_163[0],$arr_189[0],$arr_qq[0],$arr_sina[0]]),
-                $this->dataOrder($arr_139[1],[$arr_163[1],$arr_189[1],$arr_qq[1],$arr_sina[1]]),
-                $this->dataOrder($arr_139[2],[$arr_163[2],$arr_189[2],$arr_qq[2],$arr_sina[2]]),
-                $this->dataOrder($arr_139[3],[$arr_163[3],$arr_189[3],$arr_qq[3],$arr_sina[3]]),
-                $this->dataOrder($arr_139[4],[$arr_163[4],$arr_189[4],$arr_qq[4],$arr_sina[4]]),
-                $this->dataOrder($arr_139[5],[$arr_163[5],$arr_189[5],$arr_qq[5],$arr_sina[5]]),
-                $this->dataOrder($arr_139[6],[$arr_163[6],$arr_189[6],$arr_qq[6],$arr_sina[6]]),
-                $this->dataOrder($arr_139[7],[$arr_163[7],$arr_189[7],$arr_qq[7],$arr_sina[7]]),
-                $this->dataOrder($arr_139[8],[$arr_163[8],$arr_189[8],$arr_qq[8],$arr_sina[8]]),
+                $this->dataOrder($arr_139[0], [$arr_163[0], $arr_189[0], $arr_qq[0], $arr_sina[0]]),
+                $this->dataOrder($arr_139[1], [$arr_163[1], $arr_189[1], $arr_qq[1], $arr_sina[1]]),
+                $this->dataOrder($arr_139[2], [$arr_163[2], $arr_189[2], $arr_qq[2], $arr_sina[2]]),
+                $this->dataOrder($arr_139[3], [$arr_163[3], $arr_189[3], $arr_qq[3], $arr_sina[3]]),
+                $this->dataOrder($arr_139[4], [$arr_163[4], $arr_189[4], $arr_qq[4], $arr_sina[4]]),
+                $this->dataOrder($arr_139[5], [$arr_163[5], $arr_189[5], $arr_qq[5], $arr_sina[5]]),
+                $this->dataOrder($arr_139[6], [$arr_163[6], $arr_189[6], $arr_qq[6], $arr_sina[6]]),
+                $this->dataOrder($arr_139[7], [$arr_163[7], $arr_189[7], $arr_qq[7], $arr_sina[7]]),
+                $this->dataOrder($arr_139[8], [$arr_163[8], $arr_189[8], $arr_qq[8], $arr_sina[8]]),
             ];
 
-        }else{
-            $data = ['暂无排名','暂无排名','暂无排名','暂无排名','暂无排名','暂无排名','暂无排名','暂无排名','暂无排名'];
+        } else {
+            $data = ['暂无排名', '暂无排名', '暂无排名', '暂无排名', '暂无排名', '暂无排名', '暂无排名', '暂无排名', '暂无排名'];
         }
         return $data;
     }
@@ -350,8 +368,9 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return string
      */
-    private function dataOrder($avg_139,array $arr){
-        if(round($avg_139,2) != 0) {
+    private function dataOrder($avg_139, array $arr)
+    {
+        if (round($avg_139, 2) != 0) {
             $order = 1;
             foreach ($arr as $v) {
                 if ($v != 0) {
@@ -360,7 +379,7 @@ class CommonStandard extends Controller
                     }
                 }
             }
-        }else{
+        } else {
             $order = '暂无排名';
         }
         return $order;
@@ -372,17 +391,18 @@ class CommonStandard extends Controller
      * @param array $arr
      * @return array
      */
-    public function avg_charts($arr=[]){
+    public function avg_charts($arr = [])
+    {
         return [
-            $this->avgCharts($arr,1), //打开首页均值 type=1
-            $this->avgCharts($arr,2), //邮箱登录均值 type=2
-            $this->avgCharts($arr,3), //打开写信页均值 type=3
-            $this->avgCharts($arr,6), //读邮件均值 type=6
-            $this->avgCharts($arr,7), //下载1M附件均值 type=7
-            $this->avgCharts($arr,8), //发送邮件均值 type=8
-            $this->avgCharts($arr,9), //搜索邮件均值 type=9
-            $this->avgCharts($arr,12), //接收外域均值 type=12
-            $this->avgCharts($arr,109) //超大附件下载均值 type=109
+            $this->avgCharts($arr, 1), //打开首页均值 type=1
+            $this->avgCharts($arr, 2), //邮箱登录均值 type=2
+            $this->avgCharts($arr, 3), //打开写信页均值 type=3
+            $this->avgCharts($arr, 6), //读邮件均值 type=6
+            $this->avgCharts($arr, 7), //下载1M附件均值 type=7
+            $this->avgCharts($arr, 8), //发送邮件均值 type=8
+            $this->avgCharts($arr, 9), //搜索邮件均值 type=9
+            $this->avgCharts($arr, 12), //接收外域均值 type=12
+            $this->avgCharts($arr, 109) //超大附件下载均值 type=109
         ];
 
     }
@@ -394,17 +414,18 @@ class CommonStandard extends Controller
      * @param string $type
      * @return string
      */
-    private function avgCharts(array $arr,$type){
-        $avg ='';
-        if(!empty($arr)){
-            foreach($arr as $key=>$v){
-                if(strval($v['type']) != $type){
+    private function avgCharts(array $arr, $type)
+    {
+        $avg = '';
+        if (!empty($arr)) {
+            foreach ($arr as $key => $v) {
+                if (strval($v['type']) != $type) {
                     unset($arr[$key]);
                 }
             }
-            $arr_avg =  array_column($arr, 'usetime');  //将多个数组转换成一个数组
+            $arr_avg = array_column($arr, 'usetime');  //将多个数组转换成一个数组
             $count = count($arr_avg);
-            $count == 0 ? $avg=number_format(0,2) : number_format($avg = floor(array_sum($arr_avg)/$count*100)/100,2);
+            $count == 0 ? $avg = number_format(0, 2) : number_format($avg = floor(array_sum($arr_avg) / $count * 100) / 100, 2);
         }
         return $avg;
     }

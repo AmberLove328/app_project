@@ -7,6 +7,7 @@
  */
 
 namespace app\index\model;
+
 use think\Model;
 
 class Ping extends Model
@@ -17,7 +18,8 @@ class Ping extends Model
      * @return int
      * @throws
      */
-    public function saveData($data){
+    public function saveData($data)
+    {
         return $this->insertAll($data);
     }
 
@@ -27,7 +29,8 @@ class Ping extends Model
      * @return int
      * @throws
      */
-    public function deleteData($where){
+    public function deleteData($where)
+    {
         return $this->where($where)->delete();
     }
 
@@ -38,7 +41,8 @@ class Ping extends Model
      * @return object
      * @throws
      */
-    public function selectAll($where,$field){
+    public function selectAll($where, $field)
+    {
         return Ping::where($where)->field($field)->order('pingtime')->select();
 
     }
@@ -49,7 +53,8 @@ class Ping extends Model
      * @return float
      * @throws
      */
-    public function pingAvg($where){
+    public function pingAvg($where)
+    {
         return Ping::where($where)->avg('usetime');
     }
 

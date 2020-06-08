@@ -1,4 +1,3 @@
-
 layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
     var $ = layui.jquery;
     var layer = layui.layer;
@@ -12,14 +11,14 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
         if (!dir) {
             dir = $('#tvFP').text();
         }
-        layer.load(2,{time:5});
-        $.get( 'fileList', {
-            dir:dir
+        layer.load(2, {time: 5});
+        $.get('fileList', {
+            dir: dir
         }, function (res) {
             layer.closeAll('loading');
             if (res.code === 0) {
                 for (var i = 0; i < res.data.length; i++) {
-                    if(res.data[i].url !== 'null'){
+                    if (res.data[i].url !== 'null') {
                         res.data[i].url = baseServer + res.data[i].url;
                     }
                 }
@@ -29,9 +28,9 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
                     $('.file-list').html(html);
                 });
             } else {
-                layer.msg(res.msg, {icon: 5,time:1000});
+                layer.msg(res.msg, {icon: 5, time: 1000});
             }
-        },'json');
+        }, 'json');
     }
 
     renderList();
@@ -42,27 +41,27 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
         elem: '#btnUpload',
         url: 'upload',
         data: {
-            path: function(){
+            path: function () {
                 return $('#tvFP').text();
             }
         },
-        multiple:true,
-        size: 20*1024,  //限制最大上传20M
+        multiple: true,
+        size: 20 * 1024,  //限制最大上传20M
         choose: function (obj) {
-            layer.load(2,{time:5});
+            layer.load(2, {time: 5});
         },
         done: function (res, index, upload) {
             layer.closeAll('loading');
             if (res.code !== 0) {
-                layer.msg(res.msg, {icon: 5,time:1000});
+                layer.msg(res.msg, {icon: 5, time: 1000});
             } else {
-                layer.msg('上传成功', {icon: 1,time:1000});
+                layer.msg('上传成功', {icon: 1, time: 1000});
                 renderList();
             }
         },
         error: function () {
             layer.closeAll('loading');
-            layer.msg('上传失败', {icon: 5,time:1000});
+            layer.msg('上传失败', {icon: 5, time: 1000});
         },
         accept: 'file'
     });
@@ -97,16 +96,16 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            if(hasSm){
+            if (hasSm) {
                 $(".checkdown").html("&emsp;查看&emsp;");
-            }else{
+            } else {
                 $(".checkdown").html("&emsp;下载&emsp;");
             }
         }
     });
 
     // 重写右键菜单
-    $('body').delegate('.dir', "contextmenu", function(f) {
+    $('body').delegate('.dir', "contextmenu", function (f) {
         var old_name = $(this).data('name');
         var path = $('#tvFP').text();
         contextMenu.show(
@@ -114,21 +113,21 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
                 icon: 'layui-icon layui-icon-edit',
                 name: '重命名',
                 click: function () {
-                    layer.prompt({title: '文件夹名称',value: old_name},function(text, index){
-                        layer.load(2,{time:5});
+                    layer.prompt({title: '文件夹名称', value: old_name}, function (text, index) {
+                        layer.load(2, {time: 5});
                         $.ajax({
-                            url:'renameFolder',
-                            data:{dir_path:path,old_name:old_name,new_name:text},
-                            dataType:'json',
-                            type:'POST',
-                            success:function(res){
+                            url: 'renameFolder',
+                            data: {dir_path: path, old_name: old_name, new_name: text},
+                            dataType: 'json',
+                            type: 'POST',
+                            success: function (res) {
                                 layer.closeAll('loading');
                                 layer.close(index);
-                                if(res.code === 0){
-                                    layer.msg('操作成功！',{icon:1,time:1000});
+                                if (res.code === 0) {
+                                    layer.msg('操作成功！', {icon: 1, time: 1000});
                                     renderList();
-                                }else{
-                                    layer.msg(res.msg,{icon:5,time:1000});
+                                } else {
+                                    layer.msg(res.msg, {icon: 5, time: 1000});
                                 }
                             }
                         })
@@ -140,26 +139,26 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
                 name: '删除',
                 click: function () {
                     layer.confirm('确定要删除此文件夹吗？', function (index) {
-                        layer.load(2,{time:5});
+                        layer.load(2, {time: 5});
                         $.ajax({
-                            url:'delFolder',
-                            data:{path:path+'/'+old_name},
-                            dataType:'json',
-                            type:'POST',
-                            success:function(res){
+                            url: 'delFolder',
+                            data: {path: path + '/' + old_name},
+                            dataType: 'json',
+                            type: 'POST',
+                            success: function (res) {
                                 layer.closeAll('loading');
                                 layer.close(index);
-                                if(res.code === 0){
-                                    layer.msg('操作成功！',{icon:1,time:1000});
+                                if (res.code === 0) {
+                                    layer.msg('操作成功！', {icon: 1, time: 1000});
                                     renderList();
-                                }else{
-                                    layer.msg(res.msg,{icon:5,time:1000});
+                                } else {
+                                    layer.msg(res.msg, {icon: 5, time: 1000});
                                 }
                             }
                         })
                     });
                 }
-            }],f.clientX, f.clientY
+            }], f.clientX, f.clientY
         );
         return false
 
@@ -189,32 +188,34 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
 
     //导航处理A标签
     function initHtml(cDir) {
-        if( cDir === "/" ){
-            $('#tvFP1').html(retunrName("/" ,"/"));
+        if (cDir === "/") {
+            $('#tvFP1').html(retunrName("/", "/"));
             return false;
         }
-        var ms = cDir.substring(1,cDir.length);
+        var ms = cDir.substring(1, cDir.length);
         var ss = ms.split("/");
-        var s = retunrName("/" ,"/");
-        for ( i = 0; i < ss.length; i++ ){
+        var s = retunrName("/", "/");
+        for (i = 0; i < ss.length; i++) {
             var name = "/";
-            for ( j = 0; j < i; j++ ) {
-                name += ss[j]+"/";
+            for (j = 0; j < i; j++) {
+                name += ss[j] + "/";
             }
             name += ss[i];
-            if ( i > 0) {
+            if (i > 0) {
                 s += "/&nbsp;&nbsp;";
             }
-            s += retunrName( ss[i] ,name);
+            s += retunrName(ss[i], name);
         }
         $('#tvFP1').html(s);
     }
-    function retunrName(name ,aname) {
-        return "<a href='javascript:void(0);'  class='js-href' data-name='"+aname+"'>"+name+"</a>&nbsp;&nbsp;";
+
+    function retunrName(name, aname) {
+        return "<a href='javascript:void(0);'  class='js-href' data-name='" + aname + "'>" + name + "</a>&nbsp;&nbsp;";
     }
+
     //处理导航链接
-    $("body").on("click",".js-href",function () {
-        var dir =  $(this).attr("data-name");
+    $("body").on("click", ".js-href", function () {
+        var dir = $(this).attr("data-name");
         renderList(dir);
     });
 
@@ -237,16 +238,16 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
     // 删除
     $('#del').click(function () {
         layer.confirm('确定要删除此文件吗？', function () {
-            layer.load(2,{time:5});
+            layer.load(2, {time: 5});
             $.get('fileDel', {
                 file: mUrl.substring(mUrl.indexOf(baseServer) + 6)
             }, function (res) {
                 layer.closeAll('loading');
                 if (res.code === 0) {
-                    layer.msg("删除成功", {icon: 1,time:1000});
+                    layer.msg("删除成功", {icon: 1, time: 1000});
                     renderList();
                 } else {
-                    layer.msg(res.msg, {icon: 5,time:1000});
+                    layer.msg(res.msg, {icon: 5, time: 1000});
                 }
             });
         });
@@ -256,30 +257,26 @@ layui.use(['jquery', 'layer', 'contextMenu', 'upload', 'laytpl'], function () {
     $('#btnPlusFolder').click(function () {
         var path = $('#tvFP').text();
         //弹出输入文件夹名称
-        layer.prompt({title: '文件夹名称',value: ''},function(text, index){
-            layer.load(2,{time:5});
+        layer.prompt({title: '文件夹名称', value: ''}, function (text, index) {
+            layer.load(2, {time: 5});
             $.ajax({
-                url:'addFolder',
-                data:{dir_path:path,dir_name:text},
-                dataType:'json',
-                type:'POST',
-                success:function(res){
+                url: 'addFolder',
+                data: {dir_path: path, dir_name: text},
+                dataType: 'json',
+                type: 'POST',
+                success: function (res) {
                     layer.closeAll('loading');
                     layer.close(index);
-                    if(res.code === 0){
-                        layer.msg('操作成功',{icon:1,time:1000});
+                    if (res.code === 0) {
+                        layer.msg('操作成功', {icon: 1, time: 1000});
                         renderList();
-                    }else{
-                        layer.msg(res.msg,{icon:5,time:1000});
+                    } else {
+                        layer.msg(res.msg, {icon: 5, time: 1000});
                     }
                 }
             })
         });
     });
-
-
-
-
 
 
 });

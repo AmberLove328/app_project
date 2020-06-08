@@ -7,6 +7,7 @@ use app\lib\exception\ParamsException;
 use app\index\controller\Api as api;
 use think\Controller;
 use think\Log;
+use think\response\Json;
 
 class Index extends Controller
 {
@@ -79,12 +80,12 @@ class Index extends Controller
         for ($i = 0; $i < count($arrHeader); $i++) {
             $objActSheet->setCellValue("$letter[$i]1", "$arrHeader[$i]");
             $objActSheet->getStyle("$letter[$i]1")->getAlignment()->setWrapText(true);
-        };
+        }
         $j = 2;
         for ($i = 0; $i < count($arrTarget); $i++) {
             $objActSheet->setCellValue("A$j", "$arrTarget[$i]");
             $j = $j + 1;
-        };
+        }
         $a = 2;
         foreach ($xlsData as $k => $v) {
             $objActSheet->setCellValue('B' . $a, $v['0']);
@@ -173,12 +174,12 @@ class Index extends Controller
         for ($i = 0; $i < count($arrHeader); $i++) {
             $objActSheet->setCellValue("$letter[$i]1", "$arrHeader[$i]");
             $objActSheet->getStyle("$letter[$i]1")->getAlignment()->setWrapText(true);
-        };
+        }
         $j = 2;
         for ($i = 0; $i < count($arrTarget); $i++) {
             $objActSheet->setCellValue("A$j", "$arrTarget[$i]");
             $j = $j + 1;
-        };
+        }
         $a = 2;
         foreach ($xlsData as $k => $v) {
             $objActSheet->setCellValue('B' . $a, $v['0']);
@@ -286,11 +287,11 @@ class Index extends Controller
         for ($i = 0; $i < count($arrHeader); $i++) {
             $objActSheet->setCellValue("$letter_4g[$i]3", "$arrHeader[$i]");
             $objActSheet->getStyle("$letter_4g[$i]3")->getAlignment()->setWrapText(true);
-        };
+        }
         for ($i = 0; $i < count($arrTarget); $i++) {
             $objActSheet->setCellValue("A$j", "$arrTarget[$i]");
             $j = $j + 1;
-        };
+        }
         foreach ($xlsData4g as $k => $v) {
             $objActSheet->setCellValue('B' . $a, $v['0']);
             $objActSheet->setCellValue('C' . $a, $v['1']);
@@ -307,11 +308,11 @@ class Index extends Controller
         for ($i = 0; $i < count($arrHeader); $i++) {
             $objActSheet->setCellValue("$letter_wifi[$i]3", "$arrHeader[$i]");
             $objActSheet->getStyle("$letter_wifi[$i]3")->getAlignment()->setWrapText(true);
-        };
+        }
         for ($i = 0; $i < count($arrTarget); $i++) {
             $objActSheet->setCellValue("F$j", "$arrTarget[$i]");
             $j = $j + 1;
-        };
+        }
         foreach ($xlsDataWifi as $k => $v) {
             $objActSheet->setCellValue('G' . $a, $v['0']);
             $objActSheet->setCellValue('H' . $a, $v['1']);
@@ -328,11 +329,11 @@ class Index extends Controller
         for ($i = 0; $i < count($arrHeader); $i++) {
             $objActSheet->setCellValue("$letter_4g[$i]13", "$arrHeader[$i]");
             $objActSheet->getStyle("$letter_4g[$i]13")->getAlignment()->setWrapText(true);
-        };
+        }
         for ($i = 0; $i < count($arrTarget); $i++) {
             $objActSheet->setCellValue("A$b", "$arrTarget[$i]");
             $b = $b + 1;
-        };
+        }
         foreach ($xlsData as $k => $v) {
             $objActSheet->setCellValue('B' . $c, $v['0']);
             $objActSheet->setCellValue('C' . $c, $v['1']);
@@ -349,11 +350,11 @@ class Index extends Controller
         for ($i = 0; $i < count($arrHeader); $i++) {
             $objActSheet->setCellValue("$letter_4g[$i]23", "$arrHeader[$i]");
             $objActSheet->getStyle("$letter_4g[$i]23")->getAlignment()->setWrapText(true);
-        };
+        }
         for ($i = 0; $i < 5; $i++) {
             $objActSheet->setCellValue("A$d", "$arrTarget[$i]");
             $d = $d + 1;
-        };
+        }
         foreach ($xlsDataOrder as $k => $v) {
             $objActSheet->setCellValue('B' . $e, $v['0']);
             $objActSheet->setCellValue('C' . $e, $v['1']);
@@ -424,7 +425,7 @@ class Index extends Controller
     //第一张表
     /**
      * 标准版性能指标排名接口
-     * @return array
+     * @return Json
      * @throws
      */
     public function chartsStandard()
@@ -456,7 +457,7 @@ class Index extends Controller
     //第二张表
     /**
      * IMAP/SMTP接口性能指标排名
-     * @return array
+     * @return Json
      * @throws
      */
     public function chartsInterface()
@@ -487,7 +488,7 @@ class Index extends Controller
     //第三张表
     /**
      * 酷版性能指标排名
-     * @return array
+     * @return Json
      * @throws
      */
     public function chartsCool()

@@ -12,11 +12,11 @@ namespace app\index\controller;
 class Ftp
 {
 
-    private $host='';//远程服务器地址
-    private $user='';//ftp用户名
-    private $pass='';//ftp密码
-    private $port=21;//ftp登录端口
-    private $error='';//最后失败时的错误信息
+    private $host = '';//远程服务器地址
+    private $user = '';//ftp用户名
+    private $pass = '';//ftp密码
+    private $port = 21;//ftp登录端口
+    private $error = '';//最后失败时的错误信息
     protected $conn;//ftp登录资源
 
     /**
@@ -24,16 +24,17 @@ class Ftp
      * Ftp constructor.
      * @param array $config
      */
-    public function __construct(array $config=[])
+    public function __construct(array $config = [])
     {
-        empty($config) OR $this->initialize($config);
+        empty($config) or $this->initialize($config);
     }
 
     /**
      * 初始化数据
      * @param array $config 配置文件数组
      */
-    public function initialize(array $config=[]){
+    public function initialize(array $config = [])
+    {
         $this->host = $config['host'];
         $this->user = $config['user'];
         $this->pass = $config['pass'];
@@ -45,13 +46,14 @@ class Ftp
      * @param array $config 配置文件数组
      * @return bool
      */
-    public function connect(array $config=[]){
-        empty($config) OR $this->initialize($config);
-        if (FALSE == ($this->conn = @ftp_connect($this->host,$this->port,60))){
+    public function connect(array $config = [])
+    {
+        empty($config) or $this->initialize($config);
+        if (FALSE == ($this->conn = @ftp_connect($this->host, $this->port, 60))) {
             $this->error = "主机连接失败";
             return FALSE;
         }
-        if ( ! $this->_login()){
+        if (!$this->_login()) {
             $this->error = "服务器登录失败";
             return FALSE;
         }
@@ -61,8 +63,9 @@ class Ftp
     /**
      * 登录Ftp服务器
      */
-    private function _login(){
-        return @ftp_login($this->conn,$this->user,$this->pass);
+    private function _login()
+    {
+        return @ftp_login($this->conn, $this->user, $this->pass);
     }
 
 
@@ -71,7 +74,8 @@ class Ftp
      * @param string $remote_path
      * @return array|string
      */
-    public function list_file($remote_path=''){
+    public function list_file($remote_path = '')
+    {
         $contents = @ftp_nlist($this->conn, $remote_path);
         return $contents;
     }
@@ -83,14 +87,15 @@ class Ftp
      * @param string $mode 上传模式(ascii和binary其中之一)
      * @return bool
      */
-    public function download($local_file='',$remote_file='',$mode='auto'){
-        if ($mode == 'auto'){
+    public function download($local_file = '', $remote_file = '', $mode = 'auto')
+    {
+        if ($mode == 'auto') {
             $ext = $this->_get_ext($remote_file);
             $mode = $this->_set_type($ext);
         }
         $mode = ($mode == 'ascii') ? FTP_ASCII : FTP_BINARY;
         $result = @ftp_get($this->conn, $local_file, $remote_file, $mode);
-        if ($result === FALSE){
+        if ($result === FALSE) {
             return FALSE;
         }
         return TRUE;
@@ -101,8 +106,9 @@ class Ftp
      * @param string $local_file
      * @return string
      */
-    private function _get_ext($local_file=''){
-        return (($dot = strrpos($local_file,'.'))==FALSE) ? 'txt' : substr($local_file,$dot+1);
+    private function _get_ext($local_file = '')
+    {
+        return (($dot = strrpos($local_file, '.')) == FALSE) ? 'txt' : substr($local_file, $dot + 1);
     }
 
     /**
@@ -110,7 +116,8 @@ class Ftp
      * @param string $ext
      * @return string
      */
-    private function _set_type($ext=''){
+    private function _set_type($ext = '')
+    {
         //如果传输的文件是文本文件，可以使用ASCII模式，如果不是文本文件，最好使用BINARY模式传输。
         return in_array($ext, ['txt', 'text', 'php', 'phps', 'php4', 'js', 'css', 'htm', 'html', 'phtml', 'shtml', 'log', 'xml'], TRUE) ? 'ascii' : 'binary';
     }
@@ -118,7 +125,8 @@ class Ftp
     /**
      * 获取上传错误信息
      */
-    public function get_error_msg(){
+    public function get_error_msg()
+    {
         return $this->error;
     }
 
@@ -126,7 +134,8 @@ class Ftp
      * 关闭ftp连接
      * @return bool
      */
-    public function close(){
+    public function close()
+    {
         return $this->conn ? @ftp_close($this->conn) : FALSE;
     }
 

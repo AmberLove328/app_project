@@ -40,7 +40,7 @@ class Aes
      * @param mixed $options 还不是很清楚
      *
      */
-    public function __construct($key,  $iv, $method = 'aes-128-cbc', $options = OPENSSL_ZERO_PADDING)
+    public function __construct($key, $iv, $method = 'aes-128-cbc', $options = OPENSSL_ZERO_PADDING)
     {
         // key是必须要设置的
         $this->secret_key = isset($key) ? $key : 'morefun';

@@ -1,4 +1,4 @@
-layui.use(['laydate','form'],function () {
+layui.use(['laydate', 'form'], function () {
     var form = layui.form;
     var $ = layui.$;
     var laydate = layui.laydate;
@@ -6,35 +6,35 @@ layui.use(['laydate','form'],function () {
     //设置开始时间
     var startTime = laydate.render({
         elem: '#startTime', //指定元素
-        max:getNowFormatDate(),
-        type:'month',
+        max: getNowFormatDate(),
+        type: 'month',
         btns: ['confirm'],
-        done:function(value,date){
-            endTime.config.min={
-                year:date.year,
-                month:date.month-1
+        done: function (value, date) {
+            endTime.config.min = {
+                year: date.year,
+                month: date.month - 1
             };
         }
     });
     //设置结束时间
     var endTime = laydate.render({
         elem: '#endTime', //指定元素
-        max:getNowFormatDate(),
-        type:'month',
+        max: getNowFormatDate(),
+        type: 'month',
         btns: ['confirm'],
-        done:function(value,date){
-            startTime.config.max={
-                year:date.year,
-                month:date.month-1
+        done: function (value, date) {
+            startTime.config.max = {
+                year: date.year,
+                month: date.month - 1
             }
         }
     });
 
-    function charts(startTime,endTime,type) {
+    function charts(startTime, endTime, type) {
         var myChart = echarts.init(document.getElementById("container"));
         myChart.showLoading();
-        $.get('chartsMonthCool',{startTime:startTime,endTime:endTime,type:type}).done(function (res) {
-            if(res.code === 0){
+        $.get('chartsMonthCool', {startTime: startTime, endTime: endTime, type: type}).done(function (res) {
+            if (res.code === 0) {
                 var label = {
                     normal: {
                         show: true,
@@ -50,7 +50,7 @@ layui.use(['laydate','form'],function () {
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['139邮箱','189邮箱','163邮箱','qq邮箱','新浪邮箱']
+                        data: ['139邮箱', '189邮箱', '163邮箱', 'qq邮箱', '新浪邮箱']
                     },
                     grid: {
                         left: '3%',
@@ -65,7 +65,7 @@ layui.use(['laydate','form'],function () {
                     },
                     xAxis: {
                         type: 'category',
-                        name:'日期',
+                        name: '日期',
                         boundaryGap: false,
                         data: res.data.time
                     },
@@ -78,40 +78,40 @@ layui.use(['laydate','form'],function () {
                     },
                     series: [
                         {
-                            name:'139邮箱',
-                            type:'line',
-                            data:res.data.data_139,
-                            label:label
+                            name: '139邮箱',
+                            type: 'line',
+                            data: res.data.data_139,
+                            label: label
                         },
 
                         {
-                            name:'189邮箱',
-                            type:'line',
-                            data:res.data.data_189,
-                            label:label
+                            name: '189邮箱',
+                            type: 'line',
+                            data: res.data.data_189,
+                            label: label
                         },
                         {
-                            name:'163邮箱',
-                            type:'line',
-                            data:res.data.data_163,
-                            label:label
+                            name: '163邮箱',
+                            type: 'line',
+                            data: res.data.data_163,
+                            label: label
                         },
                         {
-                            name:'qq邮箱',
-                            type:'line',
-                            data:res.data.data_qq,
-                            label:label
+                            name: 'qq邮箱',
+                            type: 'line',
+                            data: res.data.data_qq,
+                            label: label
                         },
                         {
-                            name:'新浪邮箱',
-                            type:'line',
-                            data:res.data.data_sina,
-                            label:label
+                            name: '新浪邮箱',
+                            type: 'line',
+                            data: res.data.data_sina,
+                            label: label
                         }
                     ]
                 });
-            }else{
-                layer.msg(res.msg,{icon:5,time:1000});
+            } else {
+                layer.msg(res.msg, {icon: 5, time: 1000});
             }
 
         });
@@ -140,7 +140,7 @@ layui.use(['laydate','form'],function () {
 
     //搜索按钮点击事件
     $('#search').click(function () {
-        charts($('#startTime').val(),$('#endTime').val(),$('#type').val());
+        charts($('#startTime').val(), $('#endTime').val(), $('#type').val());
 
     });
 
